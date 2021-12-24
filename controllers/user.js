@@ -16,18 +16,8 @@ const usersGet = (req = request, res = response) =>{
 
 const usersPost = async (req, res) =>{
     
-
     const {nombre, correo, password, rol} = req.body;
     const usuario = new Usuario({nombre, correo, password, rol});
-    
-  
-    //Verificar si el correo existe
-    const existeEmail = await Usuario.findOne({correo: correo});
-    if(existeEmail){
-        return res.status(400).json({
-            msg: "Correo ya registrado",
-        });
-    }
 
     //Encriptar la contraseña (hasheo)
     const salt = bcrypt.genSaltSync(10);
@@ -37,8 +27,7 @@ const usersPost = async (req, res) =>{
     await usuario.save();
     
     res.json({
-        msg: "post API - Controller",
-        
+        usuario,
     });
 
 }
