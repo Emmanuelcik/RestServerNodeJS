@@ -6,6 +6,7 @@ const {isRolValido, emailValidator, existsUserByID} = require("../helpers/db-val
 
 const {fieldsValidator} = require("../middlewares/fields-validator");
 const { validarJWT } = require("../middlewares/validar-jwt");
+const { isAdmin } = require("../middlewares/validar-roles");
 
 const router = Router();
 
@@ -36,6 +37,7 @@ router.patch("/:id",[
 
 router.delete("/:id",[
     validarJWT,
+    isAdmin,
     check("id", "No es un ID válido").isMongoId(),
     check("id").custom(existsUserByID),
     fieldsValidator
