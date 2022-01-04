@@ -32,6 +32,7 @@ const usersPost = async (req, res) =>{
     const {nombre, correo, password, rol} = req.body;
     const usuario = new Usuario({nombre, correo, password, rol});
 
+    
     //Encriptar la contraseña (hasheo)
     const salt = bcrypt.genSaltSync(10);
     usuario.password = bcrypt.hashSync(password, salt);
@@ -76,13 +77,14 @@ const usersPatch = (req, res) =>{
 const usersDelete = async (req, res) =>{
 
     const {id} = req.params;
-
+    const Authuser = req.user;
     //Borrar de la bd
     // const usuario = await Usuario.findByIdAndDelete(id);
+    //En lugar de borrar solo lo pone con estado false para no deshabilitarlo
     const usuario = await Usuario.findByIdAndUpdate(id, {estado: false} );
     
 
-    res.json(usuario);
+    res.json({usuario, Authuser});
 }
 
 module.exports = {
